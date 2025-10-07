@@ -5,9 +5,11 @@ import authRoutes from './routes/authRoutes';
 import userRoutes from './routes/userRoutes';
 import projectRoutes from './routes/projectRoutes';
 import submissionRoutes from './routes/submissionRoutes';
+import commentRoutes from './routes/commentRoutes';
 import { ensureUsersTable } from './services/userService';
 import { ensureProjectTables } from './services/projectService';
 import { ensureSubmissionsTable } from './services/submissionService';
+import { ensureCommentsTable } from './services/commentService';
 
 dotenv.config();
 
@@ -19,12 +21,14 @@ const startServer = async () => {
   await ensureUsersTable();
   await ensureProjectTables();
   await ensureSubmissionsTable();
+  await ensureCommentsTable();
   app.use(express.json());
 
   app.use('/api/auth', authRoutes);
   app.use('/api/users', userRoutes);
   app.use('/api/projects', projectRoutes);
   app.use('/api/submissions', submissionRoutes);
+  app.use('/api', commentRoutes);
 
   app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);

@@ -7,6 +7,7 @@ import {
   listProjectSubmissionsHandler,
   updateSubmissionStatusHandler
 } from '../controllers/submissionController';
+import { addCommentHandler, listCommentsHandler } from '../controllers/commentController';
 
 const router = Router();
 
@@ -15,6 +16,10 @@ router.post('/', authenticateJWT, createSubmissionHandler);
 
 // View single submission
 router.get('/:id', authenticateJWT, getSubmissionHandler);
+
+// Nested comments on submissions
+router.post('/:id/comments', authenticateJWT, authorize(['reviewer']), addCommentHandler);
+router.get('/:id/comments', authenticateJWT, listCommentsHandler);
 
 // Update submission status (reviewer only)
 router.patch('/:id/status', authenticateJWT, authorize(['reviewer']), updateSubmissionStatusHandler);
