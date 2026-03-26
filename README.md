@@ -4,7 +4,7 @@ CodeTribe Node collaborative code review platform
 
 ## API overview
 
-This document lists the REST endpoints implemented so far, their purposes, required auth/roles, and request/response shapes. It covers Auth, Users, Projects, and Submissions. Comments and Review features are not documented in this section.
+This document lists the REST endpoints implemented so far, their purposes, required auth/roles, and request/response shapes. It covers Auth, Users, Projects, Submissions, and Comments. Review features are not documented in this section.
 
 All endpoints return JSON. Timestamps are ISO-8601 strings. IDs are strings unless noted otherwise.
 
@@ -81,8 +81,6 @@ DELETE /api/users/:id
 - Params:
   - id (string, required)
 - Response 204: empty
-
----
 
 ## Projects
 
@@ -182,6 +180,51 @@ DELETE /api/submissions/:id
 - Permissions: `reviewer` only
 - Params:
   - id (string, submission id, required)
+- Response 204: empty
+
+## Comments
+
+POST /api/submissions/:id/comments
+
+- Description: Add a comment to a submission.
+- Auth: Required
+- Permissions: `reviewer` only; user must be a member of the submission's project
+- Params:
+  - id (string, submission id, required)
+- Body:
+  - content (string, required)
+- Response 201:
+  - { id, submission_id, author_id, content, created_at, updated_at }
+
+GET /api/submissions/:id/comments
+
+- Description: List all comments on a submission.
+- Auth: Required
+- Permissions: Must be a member of the submission's project
+- Params:
+  - id (string, submission id, required)
+- Response 200:
+  - Array<{ id, submission_id, author_id, content, created_at, updated_at }>
+
+PATCH /api/comments/:id
+
+- Description: Update a comment.
+- Auth: Required
+- Permissions: `reviewer` only; user must be a member of the submission's project
+- Params:
+  - id (string, comment id, required)
+- Body:
+  - content (string, required)
+- Response 200:
+  - { id, submission_id, author_id, content, created_at, updated_at }
+
+DELETE /api/comments/:id
+
+- Description: Delete a comment.
+- Auth: Required
+- Permissions: `reviewer` only; user must be a member of the submission's project
+- Params:
+  - id (string, comment id, required)
 - Response 204: empty
 
 ---
