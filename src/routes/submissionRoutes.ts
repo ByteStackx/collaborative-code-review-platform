@@ -8,6 +8,7 @@ import {
   updateSubmissionStatusHandler
 } from '../controllers/submissionController';
 import { addCommentHandler, listCommentsHandler } from '../controllers/commentController';
+import { approveSubmissionHandler, listReviewsHandler, requestChangesHandler } from '../controllers/reviewController';
 
 const router = Router();
 
@@ -23,6 +24,11 @@ router.get('/:id/comments', authenticateJWT, listCommentsHandler);
 
 // Update submission status (reviewer only)
 router.patch('/:id/status', authenticateJWT, authorize(['reviewer']), updateSubmissionStatusHandler);
+
+// Review workflow
+router.post('/:id/approve', authenticateJWT, authorize(['reviewer']), approveSubmissionHandler);
+router.post('/:id/request-changes', authenticateJWT, authorize(['reviewer']), requestChangesHandler);
+router.get('/:id/reviews', authenticateJWT, listReviewsHandler);
 
 // Delete submission (reviewer only)
 router.delete('/:id', authenticateJWT, authorize(['reviewer']), deleteSubmissionHandler);

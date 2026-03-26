@@ -10,6 +10,7 @@ import { ensureUsersTable } from './services/userService';
 import { ensureProjectTables } from './services/projectService';
 import { ensureSubmissionsTable } from './services/submissionService';
 import { ensureCommentsTable } from './services/commentService';
+import { ensureReviewsTable } from './services/reviewService';
 
 dotenv.config();
 
@@ -22,6 +23,7 @@ const startServer = async () => {
   await ensureProjectTables();
   await ensureSubmissionsTable();
   await ensureCommentsTable();
+  await ensureReviewsTable();
   app.use(express.json());
 
   app.use('/api/auth', authRoutes);
